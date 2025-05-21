@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'your_secret_key';
+const SECRET_KEY = 'secret123';
 
 function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -10,12 +10,12 @@ function verifyToken(req, res, next) {
 
   const token = authHeader.split(' ')[1]; 
   if (!token) {
-    return res.status(401).json({ message: 'Missing token' });
+    return res.status(401).json({ message: 'Token not provided' });
   }
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
-    req.user = decoded; //
+    req.user = decoded; 
     next(); 
   } catch (err) {
     return res.status(403).json({ message: 'Invalid or expired token' });
