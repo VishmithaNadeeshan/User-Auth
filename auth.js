@@ -19,3 +19,19 @@ router.post('/signup', async (req, res) => {
   users.push({ username, password: hashedPassword });
   res.status(201).json({ message: 'User registered successfully' });
 });
+
+router.post('/signin', async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find(u => u.username === username);
+  if (!user) return res.status(400).json({ message: 'Invalid username or password' });
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) return res.status(400).json({ message: 'Invalid username or password' });
+
+  const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+
+  res.json({ token });
+});
+
+module.exports = router;
