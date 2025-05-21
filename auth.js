@@ -35,3 +35,9 @@ router.post('/signin', async (req, res) => {
 });
 
 module.exports = router;
+
+const verifyToken = require('./authMiddleware');
+
+router.get('/protected', verifyToken, (req, res) => {
+  res.json({ message: `Welcome ${req.user.username}, you have access!` });
+});
